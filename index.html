@@ -4,156 +4,308 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>සිංහල ප්‍රවෘත්ති සංග්‍රහය</title>
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Noto Sans Sinhala', sans-serif; background: #f0f2f5; color: #1c1e21; padding: 20px; }
-        .container { max-width: 680px; margin: 0 auto; }
-        h1 { text-align: center; margin-bottom: 25px; color: #1877f2; font-size: 2rem; }
-        .feed { display: flex; flex-direction: column; gap: 16px; }
-        .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); overflow: hidden; }
-        .card img { width: 100%; max-height: 360px; object-fit: cover; display: block; }
-        .card-body { padding: 12px 16px; }
-        .card-body h3 { font-size: 1.15rem; margin-bottom: 6px; line-height: 1.4; }
+        body {
+            font-family: 'Noto Sans Sinhala', sans-serif;
+            background: #f0f2f5;
+            color: #1c1e21;
+            padding: 20px;
+        }
+        /* Modern Header */
+        .header {
+            background: linear-gradient(135deg, #1877f2 0%, #00b4d8 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: rotateGlow 8s linear infinite;
+        }
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .header h1 {
+            position: relative;
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .header p {
+            position: relative;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        .container { max-width: 700px; margin: 0 auto; }
+
+        /* Refresh Button */
+        .refresh-btn {
+            display: block;
+            margin: 0 auto 20px;
+            background: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-family: 'Noto Sans Sinhala', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1877f2;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .refresh-btn:hover {
+            background: white;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .feed { display: flex; flex-direction: column; gap: 20px; }
+
+        /* Card Design */
+        .card {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-color: rgba(24,119,242,0.2);
+        }
+        .card img {
+            width: 100%;
+            max-height: 360px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .card:hover img { transform: scale(1.02); }
+        .card-body { padding: 18px 20px; }
+        .card-body h3 { font-size: 1.2rem; margin-bottom: 8px; line-height: 1.4; }
         .card-body h3 a { color: #050505; text-decoration: none; }
-        .card-body h3 a:hover { text-decoration: underline; }
-        .meta { font-size: 0.8rem; color: #65676b; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .snippet { font-size: 0.9rem; color: #4b4f56; line-height: 1.5; max-height: 65px; overflow: hidden; }
-        .source-tag { background: #e4e6eb; border-radius: 6px; padding: 2px 8px; font-size: 0.75rem; }
-        .placeholder-img { background: linear-gradient(135deg, #e2e8f0, #cbd5e1); height: 200px; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.2rem; }
-        .loading, .error { text-align: center; padding: 40px; font-size: 1.2rem; color: #65676b; }
+        .card-body h3 a:hover { text-decoration: underline; color: #1877f2; }
+        .meta {
+            font-size: 0.8rem;
+            color: #65676b;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .source-tag {
+            background: linear-gradient(135deg, #e8f0fe, #d2e3fc);
+            color: #174ea6;
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .snippet {
+            font-size: 0.9rem;
+            color: #4b4f56;
+            line-height: 1.6;
+            max-height: 65px;
+            overflow: hidden;
+            position: relative;
+        }
+        .snippet::after {
+            content: '...';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: white;
+            padding-left: 4px;
+        }
+        .placeholder-img {
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 1.2rem;
+        }
+
+        /* Skeleton Loading */
+        .skeleton-card {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+        }
+        .skeleton-img {
+            height: 200px;
+            background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        .skeleton-body { padding: 18px 20px; }
+        .skeleton-line {
+            height: 14px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        .skeleton-line.short { width: 60%; }
+        .skeleton-line.medium { width: 80%; }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .error { text-align: center; padding: 60px 20px; font-size: 1.2rem; color: #d32f2f; }
+        .footer-note { text-align: center; margin-top: 30px; font-size: 0.8rem; color: #888; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📰 පුවත් සැණකෙළිය</h1>
-        <div id="feed" class="feed"><div class="loading">🔄 ප්‍රවෘත්ති ලබා ගනිමින්...</div></div>
+        <div class="header">
+            <h1>📰 පුවත් සැණකෙළිය</h1>
+            <p>ඔබගේ දෛනික ප්‍රවෘත්ති සංග්‍රහය</p>
+        </div>
+        <button class="refresh-btn" onclick="loadAllFeeds()">⟳ අලුත් කරන්න</button>
+        <div id="feed" class="feed">
+            <!-- Skeleton loading cards -->
+            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
+            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
+            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
+        </div>
+        <div class="footer-note">සියලු පුවත් අදාළ මූලාශ්‍ර වෙතින් ස්වයංක්‍රීයව ලබාගැනේ.</div>
     </div>
 
     <script>
-        // ====== 1. ඔබගේ RSS Feed URLs මෙහි ======
         const FEEDS = [
-            "https://www.lankacnews.com/feeds/posts/default?alt=rss",  // ලංකාසී නිව්ස්
-            "https://sinhala.newsfirst.lk/rss.xml",                   // නිව්ස්ෆස්ට් සිංහල
-            "https://www.lankadeepa.lk/rss.xml",                      // ලංකාදීප
-            "https://si.bbc.com/sinhala/rss.xml"                      // BBC සිංහල
-            // අවශ්‍ය නම් වෙනත් URL එකතු කරන්න
+            "https://www.lankacnews.com/feeds/posts/default?alt=rss",
+            "https://sinhala.newsfirst.lk/rss.xml",
+            "https://www.lankadeepa.lk/rss.xml",
+            "https://si.bbc.com/sinhala/rss.xml"
         ];
 
         const DEFAULT_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%2364748b'%3E📷 පින්තූරයක් නැත%3C/text%3E%3C/svg%3E";
 
-        // 2. CORS Proxy list (එකක් fail උනොත් අනිත් එක try කරන්න)
         const PROXIES = [
-            "https://api.allorigins.win/raw?url=",   // ප්‍රථමික
-            "https://corsproxy.io/?"                 // විකල්ප
+            "https://api.allorigins.win/raw?url=",
+            "https://corsproxy.io/?"
         ];
 
-        // Helper: image URL extract කරන function එක
         function getImageFromItem(item) {
-            // media:content
-            const mediaContents = item.getElementsByTagNameNS("http://search.yahoo.com/mrss/", "content");
-            if (mediaContents.length > 0) {
-                const url = mediaContents[0].getAttribute("url");
-                if (url) return url;
-            }
-            // enclosure
+            const media = item.getElementsByTagNameNS("http://search.yahoo.com/mrss/", "content");
+            if (media.length > 0 && media[0].getAttribute("url")) return media[0].getAttribute("url");
             const enclosures = item.getElementsByTagName("enclosure");
             for (let enc of enclosures) {
-                if (enc.getAttribute("type")?.startsWith("image/")) {
-                    const url = enc.getAttribute("url");
-                    if (url) return url;
-                }
+                if (enc.getAttribute("type")?.startsWith("image/") && enc.getAttribute("url")) 
+                    return enc.getAttribute("url");
             }
-            // <image> tag
-            const images = item.getElementsByTagName("image");
-            if (images.length > 0) {
-                const url = images[0].textContent || images[0].getAttribute("url");
+            const imgTags = item.getElementsByTagName("image");
+            if (imgTags.length > 0) {
+                const url = imgTags[0].textContent || imgTags[0].getAttribute("url");
                 if (url) return url;
             }
-            // description ඇතුලේ <img>
-            const description = item.querySelector("description");
-            if (description?.textContent) {
-                const match = description.textContent.match(/<img[^>]+src="([^">]+)"/);
+            const desc = item.querySelector("description");
+            if (desc?.textContent) {
+                const match = desc.textContent.match(/<img[^>]+src="([^">]+)"/);
                 if (match) return match[1];
             }
             return null;
         }
 
-        // Fetch feed එක proxy list එක භාවිතා කර
         async function fetchFeed(url) {
             for (const proxy of PROXIES) {
                 try {
                     const proxyUrl = proxy + encodeURIComponent(url);
                     const response = await fetch(proxyUrl);
-                    if (!response.ok) continue; // next proxy
+                    if (!response.ok) continue;
                     const xmlText = await response.text();
                     const parser = new DOMParser();
                     const xmlDoc = parser.parseFromString(xmlText, "application/xml");
                     const items = xmlDoc.querySelectorAll("item");
                     if (items.length === 0) throw new Error("No items");
-
                     const feedTitle = xmlDoc.querySelector("channel > title")?.textContent?.trim() || url;
-                    const articles = [];
-                    items.forEach(item => {
-                        const title = item.querySelector("title")?.textContent?.trim() || "මාතෘකාව නැත";
-                        const link = item.querySelector("link")?.textContent?.trim() || "#";
-                        const pubDate = item.querySelector("pubDate")?.textContent?.trim() || "";
-                        let description = item.querySelector("description")?.textContent?.trim() || "";
-                        description = description.replace(/<[^>]*>/g, "").substring(0, 180);
-                        const image = getImageFromItem(item) || DEFAULT_IMAGE;
-
-                        articles.push({
-                            title,
-                            link,
-                            pubDate: pubDate ? new Date(pubDate).toLocaleDateString("si-LK", { year:"numeric", month:"short", day:"numeric" }) : "",
-                            image,
-                            snippet: description,
-                            source: feedTitle
-                        });
-                    });
-                    return articles; // සාර්ථක නම් return කරන්න
-                } catch (err) {
-                    console.warn(`Proxy ${proxy} fail for ${url}:`, err.message);
-                }
+                    return Array.from(items).map(item => ({
+                        title: item.querySelector("title")?.textContent?.trim() || "මාතෘකාව නැත",
+                        link: item.querySelector("link")?.textContent?.trim() || "#",
+                        pubDate: item.querySelector("pubDate")?.textContent?.trim() || "",
+                        image: getImageFromItem(item) || DEFAULT_IMAGE,
+                        snippet: (item.querySelector("description")?.textContent?.trim() || "").replace(/<[^>]*>/g, "").substring(0, 180),
+                        source: feedTitle
+                    }));
+                } catch (err) { console.warn(`Proxy fail: ${proxy}`, err.message); }
             }
-            console.error(`All proxies failed for ${url}`);
-            return []; // හැම proxy එකම fail
+            return [];
         }
 
         async function loadAllFeeds() {
+            // Show skeleton again
+            document.getElementById("feed").innerHTML = `
+                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
+                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
+                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
+            `;
             const allArticles = [];
             const results = await Promise.all(FEEDS.map(fetchFeed));
             results.forEach(arr => allArticles.push(...arr));
-            
+
             if (allArticles.length === 0) {
-                document.getElementById("feed").innerHTML = 
-                    `<div class="error">😕 කිසිදු ප්‍රවෘත්තියක් ලබාගත නොහැකි විය.</div>`;
+                document.getElementById("feed").innerHTML = `<div class="error">😕 දැනට ප්‍රවෘත්ති ලබාගත නොහැක.</div>`;
                 return;
             }
 
-            // Sort newest first
             allArticles.sort((a, b) => {
                 const da = a.pubDate ? new Date(a.pubDate) : new Date(0);
                 const db = b.pubDate ? new Date(b.pubDate) : new Date(0);
                 return db - da;
             });
-            render(allArticles);
-        }
 
-        function render(articles) {
             let html = "";
-            articles.forEach(article => {
+            allArticles.forEach((article, index) => {
+                const dateFormatted = article.pubDate ? new Date(article.pubDate).toLocaleDateString("si-LK", { year:"numeric", month:"short", day:"numeric" }) : "";
                 const isDefault = article.image === DEFAULT_IMAGE;
                 const imgHtml = isDefault
                     ? `<div class="placeholder-img">📷</div>`
                     : `<img src="${article.image}" alt="" loading="lazy" onerror="var p=this.parentNode; p.innerHTML='<div class=placeholder-img>📷</div>';">`;
                 html += `
-                <div class="card">
+                <div class="card" style="animation-delay: ${index * 0.05}s">
                     ${imgHtml}
                     <div class="card-body">
                         <div class="meta">
                             <span class="source-tag">${article.source}</span>
-                            <span>${article.pubDate}</span>
+                            <span>${dateFormatted}</span>
                         </div>
                         <h3><a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
                         <p class="snippet">${article.snippet}</p>
@@ -163,6 +315,7 @@
             document.getElementById("feed").innerHTML = html;
         }
 
+        // Initial load
         loadAllFeeds();
     </script>
 </body>
