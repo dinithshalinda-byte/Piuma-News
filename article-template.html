@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}} | AI News Lanka</title>
+    <meta name="description" content="{{DESCRIPTION}}">
+    <meta property="og:title" content="{{TITLE}}">
+    <meta property="og:description" content="{{DESCRIPTION}}">
+    <meta property="og:image" content="{{IMAGE}}">
+    <meta property="og:url" content="{{URL}}">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{TITLE}}">
+    <meta name="twitter:description" content="{{DESCRIPTION}}">
+    <meta name="twitter:image" content="{{IMAGE}}">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+            background: #f0f2f5;
+            color: #1e293b;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        }
+        .article-img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+        }
+        h1 { font-size: 2rem; margin-bottom: 1rem; }
+        .meta { color: #64748b; margin-bottom: 1rem; font-size: 0.9rem; }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #e63946;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="article-container">
+    <img class="article-img" src="{{IMAGE}}" onerror="this.src='https://i.ibb.co/0VpHq4t/news-default.png'" alt="news image">
+    <h1>{{TITLE}}</h1>
+    <div class="meta">
+        <span>📅 {{DATE}}</span> | <span>{{SOURCE}}</span>
+    </div>
+    <div class="content">
+        {{CONTENT}}
+    </div>
+    <a class="back-link" href="../index.html">← ආපසු මුල් පිටුවට</a>
+</div>
+</body>
+</html>
