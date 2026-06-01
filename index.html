@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>සිංහල ප්‍රවෘත්ති සංග්‍රහය</title>
-    <!-- Preconnect to Google Fonts -->
+    <title>සිංහල පුවත් සංග්‍රහය</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
@@ -16,7 +15,6 @@
             color: #1c1e21;
             padding: 20px;
         }
-        /* Modern Header */
         .header {
             background: linear-gradient(135deg, #1877f2 0%, #00b4d8 100%);
             backdrop-filter: blur(10px);
@@ -41,48 +39,18 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .header h1 {
-            position: relative;
-            font-size: 2.2rem;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .header p {
-            position: relative;
-            font-size: 0.95rem;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
+        .header h1 { position: relative; font-size: 2.2rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .header p { position: relative; font-size: 0.95rem; opacity: 0.9; margin-top: 5px; }
         .container { max-width: 700px; margin: 0 auto; }
-
-        /* Refresh Button */
         .refresh-btn {
-            display: block;
-            margin: 0 auto 20px;
-            background: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 50px;
-            font-family: 'Noto Sans Sinhala', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #1877f2;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            background: rgba(255,255,255,0.8);
-            border: 1px solid rgba(255,255,255,0.3);
+            display: block; margin: 0 auto 20px; background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(255,255,255,0.3); padding: 10px 25px; border-radius: 50px;
+            font-family: 'Noto Sans Sinhala', sans-serif; font-size: 0.95rem; font-weight: 600;
+            color: #1877f2; box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer;
+            transition: all 0.3s ease; backdrop-filter: blur(5px);
         }
-        .refresh-btn:hover {
-            background: white;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
-        }
-
+        .refresh-btn:hover { background: white; box-shadow: 0 6px 20px rgba(0,0,0,0.15); transform: translateY(-2px); }
         .feed { display: flex; flex-direction: column; gap: 20px; }
-
-        /* Card Design */
         .card {
             background: rgba(255,255,255,0.9);
             backdrop-filter: blur(10px);
@@ -98,99 +66,84 @@
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            border-color: rgba(24,119,242,0.2);
-        }
-        .card img {
-            width: 100%;
-            max-height: 360px;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.4s ease;
-        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-color: rgba(24,119,242,0.2); }
+        .card img { width: 100%; max-height: 360px; object-fit: cover; display: block; transition: transform 0.4s ease; }
         .card:hover img { transform: scale(1.02); }
         .card-body { padding: 18px 20px; }
         .card-body h3 { font-size: 1.2rem; margin-bottom: 8px; line-height: 1.4; }
-        .card-body h3 a { color: #050505; text-decoration: none; }
-        .card-body h3 a:hover { text-decoration: underline; color: #1877f2; }
+        /* Link style - now will trigger modal, not navigate */
+        .card-body h3 a {
+            color: #050505; text-decoration: none; cursor: pointer;
+            transition: color 0.2s;
+        }
+        .card-body h3 a:hover { color: #1877f2; text-decoration: underline; }
         .meta {
-            font-size: 0.8rem;
-            color: #65676b;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            font-size: 0.8rem; color: #65676b; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
         }
         .source-tag {
             background: linear-gradient(135deg, #e8f0fe, #d2e3fc);
-            color: #174ea6;
-            border-radius: 20px;
-            padding: 4px 14px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.3px;
+            color: #174ea6; border-radius: 20px; padding: 4px 14px; font-size: 0.75rem; font-weight: 600;
         }
         .snippet {
-            font-size: 0.9rem;
-            color: #4b4f56;
-            line-height: 1.6;
-            max-height: 65px;
-            overflow: hidden;
-            position: relative;
+            font-size: 0.9rem; color: #4b4f56; line-height: 1.6;
+            max-height: 65px; overflow: hidden; position: relative;
         }
         .snippet::after {
-            content: '...';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: white;
-            padding-left: 4px;
+            content: '...'; position: absolute; bottom: 0; right: 0;
+            background: white; padding-left: 4px;
         }
         .placeholder-img {
             background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #64748b;
-            font-size: 1.2rem;
+            height: 200px; display: flex; align-items: center; justify-content: center;
+            color: #64748b; font-size: 1.2rem;
         }
-
-        /* Skeleton Loading */
-        .skeleton-card {
-            background: white;
-            border-radius: 20px;
-            padding: 0;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+        /* Modal Styles */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
+            z-index: 1000; justify-content: center; align-items: center;
         }
-        .skeleton-img {
-            height: 200px;
-            background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: white; border-radius: 16px; width: 90%; max-width: 900px;
+            height: 85vh; display: flex; flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: modalIn 0.3s ease;
         }
-        .skeleton-body { padding: 18px 20px; }
-        .skeleton-line {
-            height: 14px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
-        .skeleton-line.short { width: 60%; }
-        .skeleton-line.medium { width: 80%; }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; border-bottom: 1px solid #eee;
         }
-
-        .error { text-align: center; padding: 60px 20px; font-size: 1.2rem; color: #d32f2f; }
-        .footer-note { text-align: center; margin-top: 30px; font-size: 0.8rem; color: #888; }
+        .modal-header .url-hint {
+            color: #888; font-size: 0.85rem; overflow: hidden;
+            text-overflow: ellipsis; white-space: nowrap; margin-right: 10px;
+        }
+        .close-btn {
+            background: none; border: none; font-size: 2rem; cursor: pointer;
+            color: #666; line-height: 1; padding: 0 10px;
+        }
+        .close-btn:hover { color: #000; }
+        .modal-body {
+            flex: 1; position: relative;
+        }
+        .modal-body iframe {
+            width: 100%; height: 100%; border: none; border-radius: 0 0 16px 16px;
+        }
+        .fallback-msg {
+            display: none; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); text-align: center;
+        }
+        .fallback-msg a { color: #1877f2; font-weight: 600; }
+        .loading-indicator {
+            display: flex; align-items: center; justify-content: center;
+            height: 100%; font-size: 1.2rem; color: #888;
+        }
+        .skeleton-card { /* keep same as before if needed */ }
     </style>
 </head>
 <body>
@@ -201,12 +154,29 @@
         </div>
         <button class="refresh-btn" onclick="loadAllFeeds()">⟳ අලුත් කරන්න</button>
         <div id="feed" class="feed">
-            <!-- Skeleton loading cards -->
             <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
             <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
             <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
         </div>
         <div class="footer-note">සියලු පුවත් අදාළ මූලාශ්‍ර වෙතින් ස්වයංක්‍රීයව ලබාගැනේ.</div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="url-hint" id="modalUrlHint"></span>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="loading-indicator" id="loadingIndicator">🔄 පිටුව පූරණය වෙමින්...</div>
+                <iframe id="modalIframe" src="" style="display:none;" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"></iframe>
+                <div id="fallbackMsg" class="fallback-msg">
+                    <p>⚠️ මෙම පුවත් අඩවිය iframe තුළ විවෘත කළ නොහැක.</p>
+                    <a id="fallbackLink" href="#" target="_blank">නව ටැබ් එකකින් විවෘත කරන්න</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -216,13 +186,8 @@
             "https://www.lankadeepa.lk/rss.xml",
             "https://si.bbc.com/sinhala/rss.xml"
         ];
-
         const DEFAULT_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%2364748b'%3E📷 පින්තූරයක් නැත%3C/text%3E%3C/svg%3E";
-
-        const PROXIES = [
-            "https://api.allorigins.win/raw?url=",
-            "https://corsproxy.io/?"
-        ];
+        const PROXIES = ["https://api.allorigins.win/raw?url=", "https://corsproxy.io/?"];
 
         function getImageFromItem(item) {
             const media = item.getElementsByTagNameNS("http://search.yahoo.com/mrss/", "content");
@@ -271,12 +236,10 @@
         }
 
         async function loadAllFeeds() {
-            // Show skeleton again
             document.getElementById("feed").innerHTML = `
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
                 <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
-                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>
-            `;
+                <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line"></div></div></div>`;
             const allArticles = [];
             const results = await Promise.all(FEEDS.map(fetchFeed));
             results.forEach(arr => allArticles.push(...arr));
@@ -307,13 +270,67 @@
                             <span class="source-tag">${article.source}</span>
                             <span>${dateFormatted}</span>
                         </div>
-                        <h3><a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
+                        <h3><a href="#" data-link="${article.link}" onclick="openModal('${article.link}'); return false;">${article.title}</a></h3>
                         <p class="snippet">${article.snippet}</p>
                     </div>
                 </div>`;
             });
             document.getElementById("feed").innerHTML = html;
         }
+
+        // Modal logic
+        const modalOverlay = document.getElementById("modalOverlay");
+        const modalIframe = document.getElementById("modalIframe");
+        const modalUrlHint = document.getElementById("modalUrlHint");
+        const loadingIndicator = document.getElementById("loadingIndicator");
+        const fallbackMsg = document.getElementById("fallbackMsg");
+        const fallbackLink = document.getElementById("fallbackLink");
+
+        function openModal(url) {
+            modalUrlHint.textContent = url;
+            fallbackMsg.style.display = "none";
+            loadingIndicator.style.display = "flex";
+            modalIframe.style.display = "none";
+            fallbackLink.href = url;
+            modalOverlay.classList.add("active");
+            // Try to load iframe
+            modalIframe.src = url;
+            // Listen for load or error
+            modalIframe.onload = () => {
+                loadingIndicator.style.display = "none";
+                modalIframe.style.display = "block";
+            };
+            modalIframe.onerror = () => {
+                // iframe failed to load
+                loadingIndicator.style.display = "none";
+                fallbackMsg.style.display = "block";
+                modalIframe.style.display = "none";
+            };
+            // Timeout fallback if onload never fires (blocked)
+            setTimeout(() => {
+                if (loadingIndicator.style.display !== "none") {
+                    loadingIndicator.style.display = "none";
+                    fallbackMsg.style.display = "block";
+                }
+            }, 5000);
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove("active");
+            modalIframe.src = ""; // stop loading
+            loadingIndicator.style.display = "flex";
+            modalIframe.style.display = "none";
+            fallbackMsg.style.display = "none";
+        }
+
+        // Close modal on overlay click
+        modalOverlay.addEventListener("click", function(e) {
+            if (e.target === modalOverlay) closeModal();
+        });
+        // ESC key
+        document.addEventListener("keydown", function(e) {
+            if (e.key === "Escape" && modalOverlay.classList.contains("active")) closeModal();
+        });
 
         // Initial load
         loadAllFeeds();
