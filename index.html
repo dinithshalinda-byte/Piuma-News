@@ -11,8 +11,7 @@
         .container { max-width: 680px; margin: 0 auto; }
         h1 { text-align: center; margin-bottom: 25px; color: #1877f2; font-size: 2rem; }
         .feed { display: flex; flex-direction: column; gap: 16px; }
-        .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); overflow: hidden; transition: box-shadow 0.2s; }
-        .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); overflow: hidden; }
         .card img { width: 100%; max-height: 360px; object-fit: cover; display: block; }
         .card-body { padding: 12px 16px; }
         .card-body h3 { font-size: 1.15rem; margin-bottom: 6px; line-height: 1.4; }
@@ -21,17 +20,8 @@
         .meta { font-size: 0.8rem; color: #65676b; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .snippet { font-size: 0.9rem; color: #4b4f56; line-height: 1.5; max-height: 65px; overflow: hidden; }
         .source-tag { background: #e4e6eb; border-radius: 6px; padding: 2px 8px; font-size: 0.75rem; }
-        .placeholder-img { 
-            background: linear-gradient(135deg, #e2e8f0, #cbd5e1); 
-            height: 200px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            color: #64748b; 
-            font-size: 1.2rem; 
-        }
+        .placeholder-img { background: linear-gradient(135deg, #e2e8f0, #cbd5e1); height: 200px; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.2rem; }
         .loading, .error { text-align: center; padding: 40px; font-size: 1.2rem; color: #65676b; }
-        .img-container { line-height: 0; } /* removes extra space under image */
     </style>
 </head>
 <body>
@@ -41,64 +31,111 @@
     </div>
 
     <script>
-        // ====== ඔබේ rss2json.com API KEY එක මෙහි ======
-        const RSS2JSON_API_KEY = "xujavmturt8mvpp1q7jcmleh78xxy4manusjxnpi";
-
-        // ====== ඔබේ RSS Feed URLs ======
+        // ====== 1. ඔබගේ RSS Feed URLs මෙහි ======
         const FEEDS = [
-            "http://www.adaderana.lk/rss.php",
-            "https://www.lankadeepa.lk/rss.xml",
-            "https://si.bbc.com/sinhala/rss.xml"
+            "https://www.lankacnews.com/feeds/posts/default?alt=rss",  // ලංකාසී නිව්ස්
+            "https://sinhala.newsfirst.lk/rss.xml",                   // නිව්ස්ෆස්ට් සිංහල
+            "https://www.lankadeepa.lk/rss.xml",                      // ලංකාදීප
+            "https://si.bbc.com/sinhala/rss.xml"                      // BBC සිංහල
+            // අවශ්‍ය නම් වෙනත් URL එකතු කරන්න
         ];
 
-        // Default placeholder image (SVG data URI)
         const DEFAULT_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%2364748b'%3E📷 පින්තූරයක් නැත%3C/text%3E%3C/svg%3E";
 
-        // Fetch single feed via rss2json API
-        async function fetchFeed(url) {
-            try {
-                const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&api_key=${RSS2JSON_API_KEY}`;
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const data = await response.json();
-                
-                if (data.status !== "ok" || !data.items || data.items.length === 0) {
-                    console.warn(`Feed ${url} returned no items or error:`, data.message || 'empty');
-                    return [];
-                }
+        // 2. CORS Proxy list (එකක් fail උනොත් අනිත් එක try කරන්න)
+        const PROXIES = [
+            "https://api.allorigins.win/raw?url=",   // ප්‍රථමික
+            "https://corsproxy.io/?"                 // විකල්ප
+        ];
 
-                const feedTitle = (data.feed && data.feed.title) ? data.feed.title : url;
-                const items = data.items.map(item => ({
-                    title: item.title || "මාතෘකාව නැත",
-                    link: item.link || "#",
-                    pubDate: item.pubDate ? new Date(item.pubDate).toLocaleDateString("si-LK", { year:"numeric", month:"short", day:"numeric"}) : "",
-                    image: item.thumbnail || (item.enclosure && item.enclosure.link) || DEFAULT_IMAGE,
-                    snippet: (item.description || "").replace(/<[^>]*>/g, "").substring(0, 180),
-                    source: feedTitle
-                }));
-                return items;
-            } catch (err) {
-                console.error(`Error fetching ${url}:`, err);
-                return [];
+        // Helper: image URL extract කරන function එක
+        function getImageFromItem(item) {
+            // media:content
+            const mediaContents = item.getElementsByTagNameNS("http://search.yahoo.com/mrss/", "content");
+            if (mediaContents.length > 0) {
+                const url = mediaContents[0].getAttribute("url");
+                if (url) return url;
             }
+            // enclosure
+            const enclosures = item.getElementsByTagName("enclosure");
+            for (let enc of enclosures) {
+                if (enc.getAttribute("type")?.startsWith("image/")) {
+                    const url = enc.getAttribute("url");
+                    if (url) return url;
+                }
+            }
+            // <image> tag
+            const images = item.getElementsByTagName("image");
+            if (images.length > 0) {
+                const url = images[0].textContent || images[0].getAttribute("url");
+                if (url) return url;
+            }
+            // description ඇතුලේ <img>
+            const description = item.querySelector("description");
+            if (description?.textContent) {
+                const match = description.textContent.match(/<img[^>]+src="([^">]+)"/);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        // Fetch feed එක proxy list එක භාවිතා කර
+        async function fetchFeed(url) {
+            for (const proxy of PROXIES) {
+                try {
+                    const proxyUrl = proxy + encodeURIComponent(url);
+                    const response = await fetch(proxyUrl);
+                    if (!response.ok) continue; // next proxy
+                    const xmlText = await response.text();
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+                    const items = xmlDoc.querySelectorAll("item");
+                    if (items.length === 0) throw new Error("No items");
+
+                    const feedTitle = xmlDoc.querySelector("channel > title")?.textContent?.trim() || url;
+                    const articles = [];
+                    items.forEach(item => {
+                        const title = item.querySelector("title")?.textContent?.trim() || "මාතෘකාව නැත";
+                        const link = item.querySelector("link")?.textContent?.trim() || "#";
+                        const pubDate = item.querySelector("pubDate")?.textContent?.trim() || "";
+                        let description = item.querySelector("description")?.textContent?.trim() || "";
+                        description = description.replace(/<[^>]*>/g, "").substring(0, 180);
+                        const image = getImageFromItem(item) || DEFAULT_IMAGE;
+
+                        articles.push({
+                            title,
+                            link,
+                            pubDate: pubDate ? new Date(pubDate).toLocaleDateString("si-LK", { year:"numeric", month:"short", day:"numeric" }) : "",
+                            image,
+                            snippet: description,
+                            source: feedTitle
+                        });
+                    });
+                    return articles; // සාර්ථක නම් return කරන්න
+                } catch (err) {
+                    console.warn(`Proxy ${proxy} fail for ${url}:`, err.message);
+                }
+            }
+            console.error(`All proxies failed for ${url}`);
+            return []; // හැම proxy එකම fail
         }
 
         async function loadAllFeeds() {
             const allArticles = [];
             const results = await Promise.all(FEEDS.map(fetchFeed));
             results.forEach(arr => allArticles.push(...arr));
-
+            
             if (allArticles.length === 0) {
                 document.getElementById("feed").innerHTML = 
-                    `<div class="error">😕 කිසිදු ප්‍රවෘත්තියක් ලබාගත නොහැකි විය.<br><small>ඔබගේ RSS feeds පරීක්ෂා කරන්න</small></div>`;
+                    `<div class="error">😕 කිසිදු ප්‍රවෘත්තියක් ලබාගත නොහැකි විය.</div>`;
                 return;
             }
 
-            // Sort by date (newest first) – some dates might be invalid, sort safely
+            // Sort newest first
             allArticles.sort((a, b) => {
-                const dateA = a.pubDate ? new Date(a.pubDate) : new Date(0);
-                const dateB = b.pubDate ? new Date(b.pubDate) : new Date(0);
-                return dateB - dateA;
+                const da = a.pubDate ? new Date(a.pubDate) : new Date(0);
+                const db = b.pubDate ? new Date(b.pubDate) : new Date(0);
+                return db - da;
             });
             render(allArticles);
         }
@@ -106,46 +143,27 @@
         function render(articles) {
             let html = "";
             articles.forEach(article => {
-                // If the image is the default placeholder OR it's missing, show placeholder div
-                const usePlaceholder = (!article.image || article.image === DEFAULT_IMAGE);
-                
-                if (usePlaceholder) {
-                    html += `
-                    <div class="card">
-                        <div class="placeholder-img">📷</div>
-                        <div class="card-body">
-                            <div class="meta">
-                                <span class="source-tag">${article.source}</span>
-                                <span>${article.pubDate}</span>
-                            </div>
-                            <h3><a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
-                            <p class="snippet">${article.snippet}</p>
+                const isDefault = article.image === DEFAULT_IMAGE;
+                const imgHtml = isDefault
+                    ? `<div class="placeholder-img">📷</div>`
+                    : `<img src="${article.image}" alt="" loading="lazy" onerror="var p=this.parentNode; p.innerHTML='<div class=placeholder-img>📷</div>';">`;
+                html += `
+                <div class="card">
+                    ${imgHtml}
+                    <div class="card-body">
+                        <div class="meta">
+                            <span class="source-tag">${article.source}</span>
+                            <span>${article.pubDate}</span>
                         </div>
-                    </div>`;
-                } else {
-                    html += `
-                    <div class="card">
-                        <div class="img-container">
-                            <img src="${article.image}" alt="" loading="lazy" 
-                                 onerror="var p=this.parentNode; p.innerHTML='<div class=placeholder-img>📷</div>';">
-                        </div>
-                        <div class="card-body">
-                            <div class="meta">
-                                <span class="source-tag">${article.source}</span>
-                                <span>${article.pubDate}</span>
-                            </div>
-                            <h3><a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
-                            <p class="snippet">${article.snippet}</p>
-                        </div>
-                    </div>`;
-                }
+                        <h3><a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
+                        <p class="snippet">${article.snippet}</p>
+                    </div>
+                </div>`;
             });
             document.getElementById("feed").innerHTML = html;
         }
 
         loadAllFeeds();
-        // Optional: auto-refresh every 15 minutes
-        // setInterval(loadAllFeeds, 900000);
     </script>
 </body>
 </html>
