@@ -3,255 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI News Lanka | AI බලයෙන් පුවත්</title>
-    <meta name="description" content="AI තාක්ෂණයෙන් සිංහල පුවත් සාරාංශ">
-    <!-- Facebook Open Graph -->
-    <meta property="og:title" content="AI News Lanka">
-    <meta property="og:description" content="සැබෑ කාලීන සිංහල පුවත්">
-    <meta property="og:image" content="https://i.ibb.co/0VpHq4t/news-default.png">
-    <meta property="og:url" content="https://shalindadinith-lang.github.io/-sinhala-news/">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AI News Lanka">
-    <meta name="twitter:description" content="AI බලයෙන් පුවත්">
-    <meta name="twitter:image" content="https://i.ibb.co/0VpHq4t/news-default.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>සිංහල ප්‍රවෘත්ති සංග්‍රහය</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg: #f0f2f5;
-            --surface: #ffffff;
-            --text: #1e293b;
-            --text-secondary: #475569;
-            --primary: #e63946;
-            --border: #e2e8f0;
-            --glass: rgba(255,255,255,0.8);
-            --shadow: 0 8px 32px rgba(0,0,0,0.08);
-            --radius: 20px;
-        }
-        body.dark {
-            --bg: #0f172a;
-            --surface: #1e293b;
-            --text: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --border: #334155;
-            --glass: rgba(30,41,59,0.8);
-        }
-        body {
-            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            transition: background 0.3s, color 0.3s;
-        }
-        .header {
-            background: rgba(230, 57, 70, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
-        }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .logo i { font-size: 2rem; }
-        .header-buttons {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .btn {
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            background: rgba(255,255,255,0.2);
-            color: #fff;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.2s;
-            font-size: 0.9rem;
-        }
-        .btn:hover { background: rgba(255,255,255,0.4); }
-        .breaking-news {
-            background: #1e293b;
-            color: #facc15;
-            padding: 0.6rem 2rem;
-            overflow: hidden;
-            white-space: nowrap;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-        }
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .card {
-            background: var(--glass);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-        }
-        .card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-bottom: 1px solid var(--border);
-        }
-        .card-content {
-            padding: 1.2rem;
-        }
-        .card-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 0.8rem;
-            line-height: 1.4;
-        }
-        .card-meta {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .search-box {
-            display: flex;
-            margin: 1.5rem 0;
-        }
-        .search-box input {
-            flex: 1;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            border: 1px solid var(--border);
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            color: var(--text);
-        }
-        .search-box button {
-            background: var(--primary);
-            border: none;
-            color: #fff;
-            padding: 0 1.8rem;
-            border-radius: 50px;
-            margin-left: 0.5rem;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .dark-toggle {
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 1.2rem;
-        }
-        footer {
-            text-align: center;
-            padding: 2rem;
-            background: var(--surface);
-            margin-top: 3rem;
-            border-top: 1px solid var(--border);
-        }
-        @media (max-width: 600px) {
-            .header { padding: 1rem; }
-            .logo { font-size: 1.3rem; }
-        }
+        body { font-family: 'Noto Sans Sinhala', sans-serif; background: #f0f2f5; color: #1c1e21; padding: 20px; }
+        .container { max-width: 680px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 25px; color: #1877f2; font-size: 2rem; }
+        .feed { display: flex; flex-direction: column; gap: 16px; }
+        .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); overflow: hidden; transition: box-shadow 0.2s; }
+        .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .card img { width: 100%; max-height: 360px; object-fit: cover; display: block; }
+        .card-body { padding: 12px 16px; }
+        .card-body h3 { font-size: 1.15rem; margin-bottom: 6px; line-height: 1.4; }
+        .card-body h3 a { color: #050505; text-decoration: none; }
+        .card-body h3 a:hover { text-decoration: underline; }
+        .meta { font-size: 0.8rem; color: #65676b; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .snippet { font-size: 0.9rem; color: #4b4f56; line-height: 1.5; max-height: 65px; overflow: hidden; }
+        .source-tag { background: #e4e6eb; border-radius: 6px; padding: 2px 8px; font-size: 0.75rem; }
+        .placeholder-img { background: linear-gradient(135deg, #e2e8f0, #cbd5e1); height: 200px; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.2rem; }
+        .loading, .error { text-align: center; padding: 40px; font-size: 1.2rem; color: #65676b; }
     </style>
 </head>
 <body>
-<div class="header">
-    <div class="logo">
-        <i class="fas fa-robot"></i> AI News Lanka
+    <div class="container">
+        <h1>📰 පුවත් සැණකෙළිය</h1>
+        <div id="feed" class="feed"><div class="loading">🔄 ප්‍රවෘත්ති ලබා ගනිමින්...</div></div>
     </div>
-    <div class="header-buttons">
-        <button class="btn" onclick="toggleDark()"><i class="fas fa-moon"></i> අඳුරු</button>
-        <button class="btn" onclick="location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
-    </div>
-</div>
-<div class="breaking-news" id="breaking">
-    <marquee id="ticker">පුවත් පූරණය වෙමින්...</marquee>
-</div>
-<div class="container">
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="🔍 පුවත් සොයන්න...">
-        <button onclick="filterNews()"><i class="fas fa-search"></i></button>
-    </div>
-    <div class="news-grid" id="newsGrid"></div>
-</div>
-<footer>© AI News Lanka - සැබෑ කාලීන සිංහල පුවත්</footer>
 
-<script>
-async function fetchArticles() {
-    try {
-        const res = await fetch('articles.json');
-        const articles = await res.json();
-        renderArticles(articles);
-        updateTicker(articles);
-    } catch (e) {
-        document.getElementById('newsGrid').innerHTML = '<p style="text-align:center">පුවත් ලබාගැනීම අසාර්ථකයි.</p>';
-    }
-}
-function renderArticles(articles) {
-    const grid = document.getElementById('newsGrid');
-    grid.innerHTML = articles.map(a => `
-        <div class="card" onclick="location.href='articles/${a.id}.html'">
-            <img src="${a.image}" onerror="this.src='https://i.ibb.co/0VpHq4t/news-default.png'" alt="news">
-            <div class="card-content">
-                <div class="card-title">${a.title}</div>
-                <div class="card-meta">
-                    <span><i class="far fa-calendar"></i> ${a.date}</span>
-                    <span>${a.source}</span>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-function updateTicker(articles) {
-    document.getElementById('ticker').innerHTML = articles.slice(0,5).map(a => a.title).join(' • ');
-}
-function filterNews() {
-    const term = document.getElementById('searchInput').value.toLowerCase();
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-        const title = card.querySelector('.card-title').innerText.toLowerCase();
-        card.style.display = title.includes(term) ? 'block' : 'none';
-    });
-}
-function toggleDark() {
-    document.body.classList.toggle('dark');
-    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-}
-if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
-fetchArticles();
-</script>
+    <script>
+        // ====== 1. ඔබේ rss2json.com API KEY එක මෙහි දමන්න ======
+        const RSS2JSON_API_KEY = "xujavmturt8mvpp1q7jcmleh78xxy4manusjxnpi";  // https://rss2json.com වෙත ගිහින් නොමිලේ key එකක් ගන්න
+
+        // ====== 2. ඔබේ RSS Feed URLs මෙහි එක් කරන්න ======
+        const FEEDS = [
+            "https://sinhala.newsfirst.lk/rss.xml",
+            "https://www.lankadeepa.lk/rss.xml",
+            "https://si.bbc.com/sinhala/rss.xml"
+            // තවත් URL ඕනෑම ගණනක් දාන්න
+        ];
+
+        const DEFAULT_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%2364748b'%3E📷 පින්තූරයක් නැත%3C/text%3E%3C/svg%3E";
+
+        // Fetch single feed via rss2json API
+        async function fetchFeed(url) {
+            try {
+                const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}&api_key=${RSS2JSON_API_KEY}`;
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                if (data.status !== "ok") throw new Error(data.message || "API error");
+
+                const feedTitle = data.feed.title || url;
+                const items = data.items.map(item => ({
+                    title: item.title || "මාතෘකාව නැත",
+                    link: item.link || "#",
+                    pubDate: item.pubDate ? new Date(item.pubDate).toLocaleDateString("si-LK", { year:"numeric", month:"short", day:"numeric"}) : "",
+                    image: item.thumbnail || item.enclosure?.link || DEFAULT_IMAGE,
+                    snippet: (item.description || "").replace(/<[^>]*>/g, "").substring(0, 180),
+                    source: feedTitle
+                }));
+                return items;
+            } catch (err) {
+                console.error(`Error fetching ${url}:`, err);
+                return []; // skip failed feed
+            }
+        }
+
+        async function loadAllFeeds() {
+            const allArticles = [];
+            const results = await Promise.all(FEEDS.map(fetchFeed));
+            results.forEach(arr => allArticles.push(...arr));
+            if (allArticles.length === 0) {
+                document.getElementById("feed").innerHTML = `<div class="error">😕 කිසිදු ප්‍රවෘත්තියක් ලබාගත නොහැකි විය.</div>`;
+                return;
+            }
+            // Sort by date (newest first)
+            allArticles.sort((a, b) => {
+                if (!a.pubDate) return 1;
+                if (!b.pubDate) return -1;
+                return new Date(b.pubDate) - new Date(a.pubDate);
+            });
+            render(allArticles);
+        }
+
+        function render(articles) {
+            let html = "";
+            articles.forEach(article => {
+                const isDefault = article.image === DEFAULT_IMAGE;
+                const imgHtml = isDefault
+                    ? `<div class="placeholder-img">📷</div>`
+                    : `<img src="${article.image}" alt="" loading="lazy" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'placeholder-img\\'>📷</div>';">`;
+
+                html += `
+                <div class="card">
+                    ${imgHtml}
+                    <div class="card-body">
+                        <div class="meta">
+                            <span class="source-tag">${article.source}</span>
+                            <span>${article.pubDate}</span>
+                        </div>
+                        <h3><a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
+                        <p class="snippet">${article.snippet}</p>
+                    </div>
+                </div>`;
+            });
+            document.getElementById("feed").innerHTML = html;
+        }
+
+        loadAllFeeds();
+        // Optional: auto-refresh every 15 minutes
+        // setInterval(loadAllFeeds, 900000);
+    </script>
 </body>
 </html>
