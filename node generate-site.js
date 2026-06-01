@@ -8,7 +8,7 @@ const FEEDS = [
   'https://api.rss2json.com/v1/api.json?rss_url=https://www.adaderana.lk/rss.php'
 ];
 
-const SITE_BASE = 'https://shalindadinith-lang.github.io/-sinhala-news/';
+const SITE_BASE = 'https://dinithshalinda-byte.github.io/Piuma-News/';
 const ARTICLES_DIR = './articles';
 const DEFAULT_IMAGE = 'https://i.ibb.co/0VpHq4t/news-default.png';
 
