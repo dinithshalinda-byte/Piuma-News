@@ -21,8 +21,17 @@
         .meta { font-size: 0.8rem; color: #65676b; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .snippet { font-size: 0.9rem; color: #4b4f56; line-height: 1.5; max-height: 65px; overflow: hidden; }
         .source-tag { background: #e4e6eb; border-radius: 6px; padding: 2px 8px; font-size: 0.75rem; }
-        .placeholder-img { background: linear-gradient(135deg, #e2e8f0, #cbd5e1); height: 200px; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.2rem; }
+        .placeholder-img { 
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e1); 
+            height: 200px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #64748b; 
+            font-size: 1.2rem; 
+        }
         .loading, .error { text-align: center; padding: 40px; font-size: 1.2rem; color: #65676b; }
+        .img-container { line-height: 0; } /* removes extra space under image */
     </style>
 </head>
 <body>
@@ -32,17 +41,17 @@
     </div>
 
     <script>
-        // ====== 1. ඔබේ rss2json.com API KEY එක මෙහි දමන්න ======
-        const RSS2JSON_API_KEY = "xujavmturt8mvpp1q7jcmleh78xxy4manusjxnpi";  // https://rss2json.com වෙත ගිහින් නොමිලේ key එකක් ගන්න
+        // ====== ඔබේ rss2json.com API KEY එක මෙහි ======
+        const RSS2JSON_API_KEY = "xujavmturt8mvpp1q7jcmleh78xxy4manusjxnpi";
 
-        // ====== 2. ඔබේ RSS Feed URLs මෙහි එක් කරන්න ======
+        // ====== ඔබේ RSS Feed URLs ======
         const FEEDS = [
             "https://sinhala.newsfirst.lk/rss.xml",
             "https://www.lankadeepa.lk/rss.xml",
             "https://si.bbc.com/sinhala/rss.xml"
-            // තවත් URL ඕනෑම ගණනක් දාන්න
         ];
 
+        // Default placeholder image (SVG data URI)
         const DEFAULT_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%2364748b'%3E📷 පින්තූරයක් නැත%3C/text%3E%3C/svg%3E";
 
         // Fetch single feed via rss2json API
@@ -52,21 +61,25 @@
                 const response = await fetch(apiUrl);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
-                if (data.status !== "ok") throw new Error(data.message || "API error");
+                
+                if (data.status !== "ok" || !data.items || data.items.length === 0) {
+                    console.warn(`Feed ${url} returned no items or error:`, data.message || 'empty');
+                    return [];
+                }
 
-                const feedTitle = data.feed.title || url;
+                const feedTitle = (data.feed && data.feed.title) ? data.feed.title : url;
                 const items = data.items.map(item => ({
                     title: item.title || "මාතෘකාව නැත",
                     link: item.link || "#",
                     pubDate: item.pubDate ? new Date(item.pubDate).toLocaleDateString("si-LK", { year:"numeric", month:"short", day:"numeric"}) : "",
-                    image: item.thumbnail || item.enclosure?.link || DEFAULT_IMAGE,
+                    image: item.thumbnail || (item.enclosure && item.enclosure.link) || DEFAULT_IMAGE,
                     snippet: (item.description || "").replace(/<[^>]*>/g, "").substring(0, 180),
                     source: feedTitle
                 }));
                 return items;
             } catch (err) {
                 console.error(`Error fetching ${url}:`, err);
-                return []; // skip failed feed
+                return [];
             }
         }
 
@@ -74,15 +87,18 @@
             const allArticles = [];
             const results = await Promise.all(FEEDS.map(fetchFeed));
             results.forEach(arr => allArticles.push(...arr));
+
             if (allArticles.length === 0) {
-                document.getElementById("feed").innerHTML = `<div class="error">😕 කිසිදු ප්‍රවෘත්තියක් ලබාගත නොහැකි විය.</div>`;
+                document.getElementById("feed").innerHTML = 
+                    `<div class="error">😕 කිසිදු ප්‍රවෘත්තියක් ලබාගත නොහැකි විය.<br><small>ඔබගේ RSS feeds පරීක්ෂා කරන්න</small></div>`;
                 return;
             }
-            // Sort by date (newest first)
+
+            // Sort by date (newest first) – some dates might be invalid, sort safely
             allArticles.sort((a, b) => {
-                if (!a.pubDate) return 1;
-                if (!b.pubDate) return -1;
-                return new Date(b.pubDate) - new Date(a.pubDate);
+                const dateA = a.pubDate ? new Date(a.pubDate) : new Date(0);
+                const dateB = b.pubDate ? new Date(b.pubDate) : new Date(0);
+                return dateB - dateA;
             });
             render(allArticles);
         }
@@ -90,23 +106,39 @@
         function render(articles) {
             let html = "";
             articles.forEach(article => {
-                const isDefault = article.image === DEFAULT_IMAGE;
-                const imgHtml = isDefault
-                    ? `<div class="placeholder-img">📷</div>`
-                    : `<img src="${article.image}" alt="" loading="lazy" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'placeholder-img\\'>📷</div>';">`;
-
-                html += `
-                <div class="card">
-                    ${imgHtml}
-                    <div class="card-body">
-                        <div class="meta">
-                            <span class="source-tag">${article.source}</span>
-                            <span>${article.pubDate}</span>
+                // If the image is the default placeholder OR it's missing, show placeholder div
+                const usePlaceholder = (!article.image || article.image === DEFAULT_IMAGE);
+                
+                if (usePlaceholder) {
+                    html += `
+                    <div class="card">
+                        <div class="placeholder-img">📷</div>
+                        <div class="card-body">
+                            <div class="meta">
+                                <span class="source-tag">${article.source}</span>
+                                <span>${article.pubDate}</span>
+                            </div>
+                            <h3><a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
+                            <p class="snippet">${article.snippet}</p>
                         </div>
-                        <h3><a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
-                        <p class="snippet">${article.snippet}</p>
-                    </div>
-                </div>`;
+                    </div>`;
+                } else {
+                    html += `
+                    <div class="card">
+                        <div class="img-container">
+                            <img src="${article.image}" alt="" loading="lazy" 
+                                 onerror="var p=this.parentNode; p.innerHTML='<div class=placeholder-img>📷</div>';">
+                        </div>
+                        <div class="card-body">
+                            <div class="meta">
+                                <span class="source-tag">${article.source}</span>
+                                <span>${article.pubDate}</span>
+                            </div>
+                            <h3><a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
+                            <p class="snippet">${article.snippet}</p>
+                        </div>
+                    </div>`;
+                }
             });
             document.getElementById("feed").innerHTML = html;
         }
